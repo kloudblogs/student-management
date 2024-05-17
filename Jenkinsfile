@@ -88,5 +88,19 @@ pipeline {
         }
 
 
+    stage("deploy-dev"){
+       steps{
+          sshagent(['tomcat']) {
+          sh """
+          scp -o StrictHostKeyChecking=no target/student-management-0.0.1-SNAPSHOT.war  
+          ubuntu@172.31.27.154:/opt/tomcat/webapps/
+          ssh ubuntu@172.31.27.154 /opt/tomcat/bin/shutdown.sh
+          ssh ubuntu@172.31.27.154 /opt/tomcat/bin/startup.sh
+           """
+            }
+          }
+        }
+
+
     }
 }
